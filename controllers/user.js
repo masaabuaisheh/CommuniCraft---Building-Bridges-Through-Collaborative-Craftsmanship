@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const db = require('../config/dbconnection');
 const randomstring = require('randomstring');
 const e = require('cors');
+
 const updeteprofileuser=(req,res)=>{
     if(req.user.role != "User"){
         return res.json("you are not user")}
