@@ -1,0 +1,1264 @@
+{
+	"info": {
+		"_postman_id": "fac5618d-21bc-4968-a379-a4ae2ba24122",
+		"name": "advanced",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33650795",
+		"_collection_link": "https://warped-trinity-4179.postman.co/workspace/My-Workspace~49674475-4d3b-4797-8422-ef80bd57b492/collection/33650795-fac5618d-21bc-4968-a379-a4ae2ba24122?action=share&source=collection_link&creator=33650795"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Users-Owners",
+					"item": [
+						{
+							"name": "showUser",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/showalluser",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"showalluser"
+									]
+								},
+								"description": "This endpoint retrieves all users from the database. Only Admin users can access this endpoint.\n\n- **200 OK** - Returns all users if the request is successful.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "deleteUser",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MTA2MTQ5NTIsImV4cCI6MTcxMDYxODU1Mn0.P8GnBeCeTTasPJ6G71O4_qle_Wtef1KpL1e0O9AGO7Y",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/deleteuser/39",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"deleteuser",
+										"39"
+									]
+								},
+								"description": "This endpoint allows an admin user to delete a user from the system. It performs cascading deletion, removing the user's records from related tables.\n\n- **200 OK** - If the user deletion is successful.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "searchuser",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:4400/APIS/searchuser/12",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"searchuser",
+										"12"
+									]
+								},
+								"description": "This endpoint allows an admin user to search for a user by their ID.\n\n- **200 OK** - Returns the user details if found.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Owner",
+					"item": [
+						{
+							"name": "addOwner",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MTA2MjAzNjAsImV4cCI6MTcxMDYyMzk2MH0.Imt6OQYPkGT2c2X2-LTjY9ks6K-qqOQAiXb1U2c24RU",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n{\r\n  \"name\": \"Lana\",\r\n  \"email\": \"lanajaraa@gmail.com\",\r\n  \"bio\":\" Project Owner: Leading the vision, guiding progress, and ensuring project success.\",\r\n  \"location\": \"Nablus\",\r\n  \"phonenumber\": \"0595485320\",\r\n  \"skills\": \"guiding progress\",\r\n  \"username\": \"lana123\",\r\n  \"password\": \"111\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/addOwner",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"addOwner"
+									]
+								},
+								"description": "This endpoint allows an admin user to add a new owner to the system. It creates a new user with the role of \"Owner\" and associated login credentials.\n\n- **200 OK** - If the owner addition is successful, returns a verification message.\n    \n- **400 Bad Request** - If the request body is invalid.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "yourAccount",
+					"item": [
+						{
+							"name": "showProfile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozOCwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA4NDM1NDksImV4cCI6MTcxMDg0NzE0OX0.M1fPXCTaFwsGPl2YLJKTfzvGeUtbN-xIeZwwT5nKleE",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/getadmin",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"getadmin"
+									]
+								},
+								"description": "This endpoint retrieves the details of the authenticated user if they have the role of \"Admin\"\n\n- **200 OK** - Returns the user details if the authenticated user is an Admin.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "updeteprofile",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"admin\",\r\n   \"email\": \"admin111123@gmail.com\",\r\n  \"bio\": \"Project admin: driving success, managing resources, fostering collaboration.\",\r\n  \"location\": \"Nablus-palestine\",\r\n  \"phonenumber\": \"0595848588\",\r\n  \"skills\": \"[HTML, CSS,c++]\"\r\n  \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/updeteprofile/9",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"updeteprofile",
+										"9"
+									]
+								},
+								"description": "This endpoint allows an admin user to update the profile details of another user.\n\n- **200 OK** - If the profile update is successful.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Projects",
+					"item": [
+						{
+							"name": "showProject",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MTA2OTcyNDAsImV4cCI6MTcxMDcwMDg0MH0.HKFEr9ljk3lR4FIpmvQt83sV7j8t9ToqEh5lrRATxDo",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/showallprojects",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"showallprojects"
+									]
+								},
+								"description": "This endpoint allows an admin user to retrieve information about all projects in the system.\n\n- **200 OK** - Returns the list of projects if the request is successful.\n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "searchproject",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/searchproject/40",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"searchproject",
+										"40"
+									]
+								},
+								"description": "This endpoint allows an admin user to search for a project by its ID.\n\n- **200 OK** - Returns the project details if found.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "addproject",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MTA5NTY0ODAsImV4cCI6MTcxMDk2MDA4MH0.Jzibj9WSp61y8HgHTS8YGVmTGu-aWHz3nbXtexTIadA",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\":\"full stack2\", \r\n    \"description\": \"this project improtent\",\r\n    \"group_size\":\"2\",\r\n     \"showcased\": \"1\", \r\n    \"skill_name\":\"object oriented\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/addproject",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"addproject"
+									]
+								},
+								"description": "This endpoint allows an admin user to add a new project to the system. It also handles adding the project's associated skills.\n\n- **201 Created** - If the project addition is successful.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Shatgpt",
+			"item": [
+				{
+					"name": "chatgpt",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozOCwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA4NDI3NzgsImV4cCI6MTcxMDg0NjM3OH0.Rn-XJdwUeZnDC96vwiMiYbfy-Ev9gcTHGXF4mPC6YcU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"content\": \"Hello! I'm an AI assistant bot based on ChatGPT 3. How may I help you?\",\r\n        \"role\": \"system\"\r\n    },\r\n    {\r\n        \"content\": \"how are you\",\r\n        \"role\": \"user\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4400/APIS/chat",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"APIS",
+								"chat"
+							]
+						},
+						"description": "This endpoint allows users to interact with the GPT-based chatbot using the ChatGPT API.\n\n- **200 OK** - If the request is successful, returns the response from the GPT-based chatbot.\n    \n- **500 Internal Server Error** - If there's a server or external API error while processing the request."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login/Logout",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"username\": \"nancy\",\r\n   \"password\": \"$2a$10$u/2co98kXW5O0NQW1.i2MOamBof5OS7nYzEyHIrRdtUcuTNKEo6zi\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4400/APIS/login",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"APIS",
+								"login"
+							]
+						},
+						"description": "This endpoint allows a user to log in by providing their username and password.\n\n- **200 OK** - If the login is successful, returns user data and a JWT token.\n    \n- **400 Bad Request** - If the request body is invalid.\n    \n- **401 Unauthorized** - If the username or password is incorrect.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"username\": \"test123\",\r\n   \"password\": \"1244\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4400/APIS/reset-password",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"APIS",
+								"reset-password"
+							]
+						},
+						"description": "This endpoint allows a user to reset their password by providing a new password.\n\n- **200 OK** - If the password reset is successful.\n    \n- **400 Bad Request** - If the new password is missing in the request body.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozOCwiaWF0IjoxNzEwNTM4MjIwLCJleHAiOjE3MTA1NDE4MjB9.UzWpYb0abXSzyJMJfAvyANgeHKpj5aII9N3lGwHUIXw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"username\": \"test123\",\r\n   \"password\": \"1244\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4400/APIS/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"APIS",
+								"logout"
+							]
+						},
+						"description": "This endpoint allows a user to log out by removing their authentication token from the database.\n\n- **200 OK** - If the logout is successful, returns a confirmation message.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Owner",
+			"item": [
+				{
+					"name": "yourAccount",
+					"item": [
+						{
+							"name": "updeteYourProfile",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"admin\",\r\n   \"email\": \"admin1000003@gmail.com\",\r\n  \"bio\": \"Project admin: driving success, managing resources, fostering collaboration.\",\r\n  \"location\": \"Nablus-Palestine\",\r\n  \"phonenumber\": \"0595848589\",\r\n  \"skills\": \"[HTML, CSS,c++]\"\r\n  \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/updeteprofileowner",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"updeteprofileowner"
+									]
+								},
+								"description": "This endpoint allows an owner user to update their profile details.\n\n- **200 OK** - If the profile update is successful.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Owner.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "showProfile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MSwicm9sZSI6Ik93bmVyIiwiaWF0IjoxNzEwNjk3NjkzLCJleHAiOjE3MTA3MDEyOTN9.hqkXGoRVyMTH_0WX-gS5vWpcDcZGvwBsS0ZYdkApXUs",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/getowner",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"getowner"
+									]
+								},
+								"description": "This endpoint allows an owner user to retrieve their own information.\n\n- **200 OK** - If the request is successful, returns the owner's information.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Owner.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "projects",
+					"item": [
+						{
+							"name": "showallproject",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:4400/APIS/showallproject",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"showallproject"
+									]
+								},
+								"description": "This endpoint allows an admin user to retrieve information about all projects in the system.\n\n- **200 OK** - Returns the list of projects if the request is successful.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of Admin.\n    \n- **500 Internal Server Error** - If there's a server error while processing the request."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Sign Up",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n  \"name\": \"TestUser\",\r\n  \"email\": \"test123@gmail.com\",\r\n  \"bio\": \"Frontend Developer: Crafting seamless user experiences with code, bringing designs to life, and optimizing performance for web applications.\",\r\n  \"location\": \"Nablus\",\r\n  \"phonenumber\": \"0595848598\",\r\n  \"skills\": \"[HTML, CSS]\",\r\n  \"username\": \"test123\",\r\n  \"password\": \"1234\"\r\n}\r\n\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4400/APIS/register",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"APIS",
+								"register"
+							]
+						},
+						"description": "This endpoint allows users to register by providing their details.\n\n- **200 OK** - If the registration is successful, returns a verification message.\n    \n- **400 Bad Request** - If the request body is invalid.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+					},
+					"response": []
+				},
+				{
+					"name": "verify-email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4400/APIS/verify-email?token=oJzho2vx2Eirm2S8wlOLc43jaJCpXXyT",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"APIS",
+								"verify-email"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "oJzho2vx2Eirm2S8wlOLc43jaJCpXXyT"
+								}
+							]
+						},
+						"description": "This endpoint allows users to verify their email address using a verification token.\n\n- **200 OK** - If the email verification is successful, returns a success message.\n- **400 Bad Request** - If the verification token is missing.\n- **404 Not Found** - If the verification token is invalid or not found in the database.\n- **500 Internal Server Error** - If there's a server or database error while processing the request.\n    \n\n<img src=\"https://content.pstmn.io/61ceac0c-fbb9-4885-a806-8ac62f60a06f/V2hhdHNBcHAgSW1hZ2UgMjAyNC0wMy0yMSBhdCAyLjU4LjUzIEFNLmpwZWc=\">"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "yourAccount",
+					"item": [
+						{
+							"name": "showProfile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/getuser",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"getuser"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "This endpoint allows a user to retrieve their own information.\n\n- **200 OK** - Returns the user's information if the request is successful.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of User.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "updeteYourProfile",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMiwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA2MzI2MjMsImV4cCI6MTcxMDYzNjIyM30.szrY2-etKSuLRP7qGYMtNSDdqfDqn1gy9ereX0oT0Kc",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"masa-abu\",\r\n   \"email\": \"masa003@gmail.com\",\r\n  \"bio\": \"Frontend Developer: Crafting seamless user experiences with code, bringing designs to life, and optimizing performance for web applications.\",\r\n  \"location\": \"Nablus\",\r\n  \"phonenumber\": \"0595948598\",\r\n  \"skills\": \"[HTML, CSS, JavaScript]\"\r\n  \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/updeteprofileuser",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"updeteprofileuser"
+									]
+								},
+								"description": "This endpoint allows a user to update their profile information.\n\n- **200 OK** - If the profile update is successful, returns a success message.\n    \n- **401 Unauthorized** - If the user is not authenticated or doesn't have the role of User.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ownMaterial",
+					"item": [
+						{
+							"name": "addMaterial",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nameofmaterial\": \"t5\",\r\n    \"user_email\": \"t55555t@gmail.com\",\r\n    \"project_title\": \"Inventory Management System Backend\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/addMaterial",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"addMaterial"
+									]
+								},
+								"description": "This endpoint allows users to add material for a project.\n\n- **201 Created** - If the material is added successfully or its quantity is updated.\n    \n- **403 Forbidden** - If the user is not authorized to add material.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "deleteYourMaterial",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMiwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA2MzE5NTgsImV4cCI6MTcxMDYzNTU1OH0.-nDk07dJtC8Lzai_WorvkcnuQogCxBxKcy2kapdbxtI",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nameofmaterial\": \"Maerial Name\",\r\n  \"project_title\": \"Projecttle\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/deleteYourMaterial",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"deleteYourMaterial"
+									]
+								},
+								"description": "This endpoint allows users to delete a specific material associated with their account.  \n  \n\n- **200 OK** - If the material is deleted successfully or its quantity is decremented.\n    \n- **404 Not Found** - If the material is not found or does not belong to the user.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request"
+							},
+							"response": []
+						},
+						{
+							"name": "showYourMaterial",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozOCwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA4NDM1NDksImV4cCI6MTcxMDg0NzE0OX0.M1fPXCTaFwsGPl2YLJKTfzvGeUtbN-xIeZwwT5nKleE",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/getYourMaterial",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"getYourMaterial"
+									]
+								},
+								"description": "This endpoint allows users to retrieve materials added by them.\n\n- **200 OK** - If the materials are retrieved successfully.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "userMaterial",
+					"item": [
+						{
+							"name": "showAllVariableMaterials",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA3MjM3MjksImV4cCI6MTcxMDcyNzMyOX0.UHQTkxBsO6hoa1HN9wOTXjIkDncgga9CiiwMKI4vZno",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/showAllVariableMaterials",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"showAllVariableMaterials"
+									]
+								},
+								"description": "This endpoint allows users to view available materials associated with their active projects.  \n  \n\n- **200 OK** - If materials are retrieved successfully.\n    \n- **404 Not Found** - If the user has no active associated projects or no materials are found for the user's projects.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "buyMaterial",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDk5MjEsImV4cCI6MTcxMDk1MzUyMX0.g9NXNLzxGP8ig9zxdcvEE0OIY8WH9Lrf8ySlFKT8qow",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nameofmaterial\": \"t5\",\r\n  \"project_title\": \"Inventory Management System Backend\",\r\n  \"email\": \"mmmm@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/buyMaterial",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"buyMaterial"
+									]
+								},
+								"description": "This endpoint allows users to buy materials associated with their projects.  \n  \n\n- **200 OK** - If the material is purchased successfully.\n    \n- **400 Bad Request** - If the user is not associated with any project, the specified project title does not match the user's associated projects, the user already bought the material, or other invalid request parameters.\n    \n- **404 Not Found** - If the material is not found for the specified project title.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "skills",
+					"item": [
+						{
+							"name": "showskills",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/projects/skill/1",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"skill",
+										"1"
+									]
+								},
+								"description": "This endpoint retrieves projects associated with a specific skill.  \n\n- **200 OK** - If projects associated with the skill are found.\n    \n- **400 Bad Request** - If the user is not authorized or other invalid request parameters.\n    \n- **404 Not Found** - If no projects are found for the specified skill ID.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "groupSize",
+					"item": [
+						{
+							"name": "getprojectbyGroupSize",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/projects/groupsize/8",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"groupsize",
+										"8"
+									]
+								},
+								"description": "This endpoint retrieves projects with a minimum group size equal to or greater than the specified value.  \n  \n\n- **200 OK** - If projects with the specified minimum group size are found.\n    \n- **400 Bad Request** - If the user is not authorized or other invalid request parameters.\n    \n- **404 Not Found** - If no projects are found for the specified minimum group size.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "projectID",
+					"item": [
+						{
+							"name": "getProjectDetailsById",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/projects/1",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"1"
+									]
+								},
+								"description": "This endpoint retrieves all projects available in the database.  \n  \n\n- **200 OK** - If projects are successfully retrieved.\n    \n- **400 Bad Request** - If the user is not authorized.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "getProjectTasksByProjectId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/projects/1/tasks",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"1",
+										"tasks"
+									]
+								},
+								"description": "This endpoint retrieves all tasks associated with a specific project by its ID.  \n  \n\n- **200 OK** - If tasks are successfully retrieved.\n    \n- **400 Bad Request** - If the user is not authorized.\n    \n- **404 Not Found** - If no tasks are found for the specified project ID.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "showcased",
+					"item": [
+						{
+							"name": "showcased",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/projects/showcased",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"showcased"
+									]
+								},
+								"description": "This endpoint retrieves all showcased projects.  \n  \n\n- **200 OK** - If showcased projects are successfully retrieved.\n    \n- **400 Bad Request** - If the user is not authorized.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "toggleshowcased",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"description": "This endpoint toggles the showcase status of a project.  \n  \n\n- **200 OK** - If the project showcase status is successfully toggled.\n    \n- **400 Bad Request** - If the user is not authorized.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "comments",
+					"item": [
+						{
+							"name": "getcomments",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/projects/1/comments",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"1",
+										"comments"
+									]
+								},
+								"description": "This endpoint retrieves comments for a specific project.  \n  \n\n- **200 OK** - If comments are successfully retrieved.\n    \n- **400 Bad Request** - If the user is not authorized.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "postcomment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"commentText\": \"This is an insightful project!\",\r\n   \"userId\": 9\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/projects/1/comments",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"1",
+										"comments"
+									]
+								},
+								"description": "This endpoint allows a user to post a comment on a specific project.  \n  \n\n- **200 OK** - If the comment is successfully posted.\n    \n- **400 Bad Request** - If the user is not authorized or if required fields are missing.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "userid",
+					"item": [
+						{
+							"name": "getUserProfileById",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/users/9",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"users",
+										"9"
+									]
+								},
+								"description": "This endpoint allows a user to retrieve the profile of another user by their user ID.\n\n- **200 OK** - If the user profile is successfully retrieved.\n- **400 Bad Request** - If the user is not authorized or if the user ID is missing.\n- **404 Not Found** - If the user with the specified ID is not found.\n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "getUserSkillsByUserId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/users/10/skills",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"users",
+										"10",
+										"skills"
+									]
+								},
+								"description": "StartFragment\n\n  \nHere's the API documentation for your `getUserSkillsByUserId` endpoint:\n\n### Get User Skills by User ID\n\n**Description:**  \nThis endpoint allows a user to retrieve the skills of another user by their user ID.\n\n- **URL:** `/api/users/:userId/skills`\n    \n- **Method:** `GET`\n    \n- **Authentication:** Requires authentication with a valid JWT token.\n    \n- **Role:** User\n    \n\n#### Request Headers:\n\n| Header | Description | Required |\n| --- | --- | --- |\n| Authorization | Bearer | Yes |\n\n#### Path Parameters:\n\n| Parameter | Description | Required |\n| --- | --- | --- |\n| userId | The ID of the user whose skills are to be retrieved | Yes |\n\n#### Response:\n\nThis endpoint allows a user to retrieve the skills of another user by their user ID.  \n  \n\n- **200 OK** - If the user skills are successfully retrieved.\n    \n- **400 Bad Request** - If the user is not authorized or if the user ID is missing.\n    \n- **404 Not Found** - If the user with the specified ID is not found.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Collaboration",
+					"item": [
+						{
+							"name": "findPotentialCollaborators",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:4400/APIS/collaborators/1",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"collaborators",
+										"1"
+									]
+								},
+								"description": "This endpoint allows a user to find potential collaborators for a specific project based on matching skills.  \n  \n\n- **200 OK** - If potential collaborators are successfully found.\n    \n- **400 Bad Request** - If the user is not authorized or if the project ID is missing.\n    \n- **404 Not Found** - If the project with the specified ID is not found.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tasks",
+					"item": [
+						{
+							"name": "addNewTask",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"taskName\": \"project2!\",\r\n   \"assignedTo\": 5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/projects/1/tasks",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"1",
+										"tasks"
+									]
+								},
+								"description": "This endpoint allows a user to add a new task to a specific project.  \n  \n\n- **200 OK** - If the task is successfully added to the project.\n    \n- **400 Bad Request** - If the user is not authorized, or if the project ID is missing, or if required fields are missing in the request body.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						},
+						{
+							"name": "updateProjectTask",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMSwicm9sZSI6IlVzZXIiLCJpYXQiOjE3MTA5NDA0NTcsImV4cCI6MTcxMDk0NDA1N30.4lIztFVoyE0q1p1Hr0zYLLENqFHWamSyyF0mys-RAOY",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"taskName\": \"project5!\",\r\n   \"assignedTo\": 5\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:4400/APIS/projects/1/tasks/2",
+									"host": [
+										"localhost"
+									],
+									"port": "4400",
+									"path": [
+										"APIS",
+										"projects",
+										"1",
+										"tasks",
+										"2"
+									]
+								},
+								"description": "This endpoint allows a user to update an existing task within a specific project.  \n  \n\n- **200 OK** - If the task is successfully updated.\n    \n- **400 Bad Request** - If the user is not authorized, or if the project ID or task ID is missing, or if required fields are missing in the request body.\n    \n- **500 Internal Server Error** - If there's a server or database error while processing the request."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
