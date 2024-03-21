@@ -4,6 +4,7 @@ const addMaterial = async (req, res) => {
   if(req.user.role != "User"){
     return res.json("you are not user")}
     try {
+      
       // Extract required parameters from the request body
       const { nameofmaterial, project_title } = req.body;
       const user_id = req.user.user_id; // Assuming the user_id is stored in req.user.user_id
