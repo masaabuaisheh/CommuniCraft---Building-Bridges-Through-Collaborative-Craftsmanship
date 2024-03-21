@@ -1,6 +1,6 @@
 const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const db = require('../config/dbconnection');
+const db = require('../config/dbConnection');
 const randomstring = require('randomstring');
 const e = require('cors');
 
@@ -28,9 +28,9 @@ const updeteprofileuser=(req,res)=>{
                
             
         });
-    };
+};
 
-    const getuser = (req, res) => {
+const getuser = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
             const id = req.user.user_id;
@@ -48,18 +48,18 @@ const updeteprofileuser=(req,res)=>{
                 return res.status(200).send({ success: true, data: result[0], message: 'User found.' });
             }
         );
-    };
+};
 
-    const getProjects = (req, res) => {
+const getProjects = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         db.query('SELECT * FROM project', (error, results) => {
           if (error) throw error;
           res.json(results);
         });
-      };
+};
       
-      const getProjectsBySkill = (req, res) => {
+const getProjectsBySkill = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { skillId } = req.params;
@@ -67,9 +67,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results);
         });
-      };
+};
       
-      const getProjectsByGroupSize = (req, res) => {
+const getProjectsByGroupSize = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { groupSize } = req.params;
@@ -77,9 +77,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results);
         });
-      };
+};
       
-      const getProjectDetailsById = (req, res) => {
+const getProjectDetailsById = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -87,9 +87,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results[0]);
         });
-      };
+};
       
-      const getUserProfileById = (req, res) => {
+const getUserProfileById = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { userId } = req.params;
@@ -97,9 +97,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results[0]);
         });
-      };
+};
       
-      const getUserSkillsByUserId = (req, res) => {
+const getUserSkillsByUserId = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { userId } = req.params;
@@ -112,9 +112,9 @@ const updeteprofileuser=(req,res)=>{
          
           res.json(results.length > 0 ? results[0].skills.split(',') : []);
         });
-      };
+};
       
-      const findPotentialCollaborators = (req, res) => {
+const findPotentialCollaborators = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -122,9 +122,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results);
         });
-      };
+};
       
-      const getProjectTasksByProjectId = (req, res) => {
+const getProjectTasksByProjectId = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -132,9 +132,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results);
         });
-      };
+};
       
-      const addNewTaskToProject = (req, res) => {
+const addNewTaskToProject = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -143,9 +143,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.send('Task added successfully');
         });
-      };
+};
       
-      const postComment = (req, res) => {
+const postComment = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -154,9 +154,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.send('Comment added successfully');
         });
-      };
+};
       
-      const getComments = (req, res) => {
+const getComments = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -164,8 +164,9 @@ const updeteprofileuser=(req,res)=>{
           if (error) throw error;
           res.json(results);
         });
-      };
-      const getShowcasedProjects = (req, res) => {
+};
+
+const getShowcasedProjects = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         console.log("Here");
@@ -177,9 +178,9 @@ const updeteprofileuser=(req,res)=>{
          
           res.json(results);
         });
-      };
+};
       
-      const toggleProjectShowcase = (req, res) => {
+const toggleProjectShowcase = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId } = req.params;
@@ -191,9 +192,9 @@ const updeteprofileuser=(req,res)=>{
           console.log('Project showcase status toggled successfully');
           res.send('Project showcase status toggled successfully');
         });
-      };
+};
       
-      const updateProjectTask = (req, res) => {
+const updateProjectTask = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { projectId, taskId } = req.params;
@@ -206,29 +207,23 @@ const updeteprofileuser=(req,res)=>{
           }
           res.send('Task updated successfully');
         });
-      };
-      
-      
-      
-     
-    
-    module.exports = {
-        updeteprofileuser,
-        getuser,
-        getProjects,
-        getProjectsBySkill,
-        getProjectsByGroupSize,
-        getProjectDetailsById,
-        getUserProfileById,
-        getUserSkillsByUserId,
-        findPotentialCollaborators,
-        getProjectTasksByProjectId,
-        addNewTaskToProject,
-        postComment,
-        getComments,
-        getShowcasedProjects,
-        toggleProjectShowcase,
-        updateProjectTask
-
-
-    }
+};
+        
+module.exports = {
+    updeteprofileuser,
+    getuser,
+    getProjects,
+    getProjectsBySkill,
+    getProjectsByGroupSize,
+    getProjectDetailsById,
+    getUserProfileById,
+    getUserSkillsByUserId,
+    findPotentialCollaborators,
+    getProjectTasksByProjectId,
+    addNewTaskToProject,
+    postComment,
+    getComments,
+    getShowcasedProjects,
+    toggleProjectShowcase,
+    updateProjectTask
+}

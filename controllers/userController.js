@@ -1,6 +1,6 @@
 const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const db = require('../config/dbconnection');
+const db = require('../config/dbConnection');
 const randomstring = require('randomstring');
 
 const jwt = require('jsonwebtoken');
@@ -141,7 +141,7 @@ const logout = async (req, res) => {
       console.error(err);
       res.status(500).json(err.stack );
     }
-  };
+};
 
 
 const login = (req, res) => {
@@ -177,8 +177,6 @@ const login = (req, res) => {
         }
     );
 };
-
-
 
 
 function handleSuccessfulLogin(req, res, result) {
@@ -237,8 +235,7 @@ function handleSuccessfulLogin(req, res, result) {
             );
         }
     );
-}
-
+};
 
 
 const resetPassword = (req, res) => {
@@ -269,9 +266,6 @@ const resetPassword = (req, res) => {
         );
     });
 };
-
-
-
 
 module.exports = {
     register,

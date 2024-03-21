@@ -1,4 +1,4 @@
-const db = require('../config/dbconnection');
+const db = require('../config/dbConnection');
 
 const addMaterial = async (req, res) => {
   if(req.user.role != "User"){
@@ -57,7 +57,7 @@ const addMaterial = async (req, res) => {
       console.error('Error adding material:', error);
       res.status(500).json({ success: false, error: 'An error occurred while adding material' });
     }
-  };
+};
 
 
 const getYourMaterial  = async (req, res) => {
@@ -216,7 +216,6 @@ const showavailablematerial = async (req, res) => {
     res.status(500).json({ success: false, error: 'An unexpected error occurred while retrieving materials' });
   }
 };
-
 
 
 const buyMaterial = async (req, res) => {

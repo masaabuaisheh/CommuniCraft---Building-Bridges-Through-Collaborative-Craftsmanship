@@ -1,6 +1,6 @@
 const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const db = require('../config/dbconnection');
+const db = require('../config/dbConnection');
 const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
@@ -30,9 +30,9 @@ const updeteprofileowner=(req,res)=>{
                
             
         });
-    };
+};
 
-    const getowner = (req, res) => {
+const getowner = (req, res) => {
         if(req.user.role != "Owner"){
             return res.json("you are not Owner")}
             const id = req.user.user_id;
@@ -50,12 +50,10 @@ const updeteprofileowner=(req,res)=>{
                 return res.status(200).send({ success: true, data: result[0], message: 'User found.' });
             }
         );
-    };
-
+};
 
     
-    
-    module.exports = {
-        updeteprofileowner,
-        getowner
-    }
+module.exports = {
+    updeteprofileowner,
+    getowner
+}
