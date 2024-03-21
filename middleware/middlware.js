@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET_KEY = 'my-super-strong-secret'; 
-const db = require('../config/dbConnection');
+const db = require('../config/dbconnection');
 var islog;
 
 

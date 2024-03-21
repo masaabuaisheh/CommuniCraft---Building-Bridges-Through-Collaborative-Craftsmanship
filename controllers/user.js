@@ -1,6 +1,6 @@
 const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const db = require('../config/dbConnection');
+const db = require('../config/dbconnection');
 const randomstring = require('randomstring');
 const e = require('cors');
 

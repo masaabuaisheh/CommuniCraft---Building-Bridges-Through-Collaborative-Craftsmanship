@@ -1,4 +1,4 @@
-const db = require('../config/dbConnection');
+const db = require('../config/dbconnection');
 
 const addMaterial = async (req, res) => {
   if(req.user.role != "User"){
