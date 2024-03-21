@@ -3,7 +3,6 @@ const request = require('request');
 function chatGPT(req, res) {
     // Request body containing the data to be sent
     const requestBody = req.body;
-    
   // Options for the external API call
   const options = {
       method: 'POST',

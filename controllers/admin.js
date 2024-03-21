@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const db = require('../config/dbconnection');
 const randomstring = require('randomstring');
 
-
 const showallprojects = (req, res) => {
    
     if(req.user.role != "Admin"){

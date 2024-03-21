@@ -16,7 +16,6 @@ app.use(cors());
 
 app.use('/APIS',userRoute);
 
-
 //error handling
 app.use((err, req, res, next) => {
     err.statusCode = err.statusCode || 500;

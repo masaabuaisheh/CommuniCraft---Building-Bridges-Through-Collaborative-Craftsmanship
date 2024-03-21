@@ -6,7 +6,6 @@ const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
 
-
 const register = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

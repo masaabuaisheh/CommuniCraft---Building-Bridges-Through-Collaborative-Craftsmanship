@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
 const e = require('cors');
 
-
 const updeteprofileowner=(req,res)=>{
     if(req.user.role != "Owner"){
         return res.json("you are not Owner")}

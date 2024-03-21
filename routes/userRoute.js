@@ -15,6 +15,7 @@ router.post('/login', userController.login);
 // Route for verifying user email
 router.get('/verify-email',loginValidation, userController.verifyEmail);
 //extracting useful information from the token, like who the user is
+
 router.post('/reset-password',loginValidation, userController.resetPassword);
 router.post('/logout',userController.logout);
 router.get('/showallprojects',authenticateJWT,admin.showallprojects);
