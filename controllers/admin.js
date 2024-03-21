@@ -1,6 +1,6 @@
 const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const db = require('../config/dbconnection');
+const db = require('../config/dbConnection');
 const randomstring = require('randomstring');
 
 const showallprojects = (req, res) => {
@@ -21,7 +21,7 @@ const showallprojects = (req, res) => {
            
         
     });
-}
+};
 
 const showalluser=(req,res)=>{
         if(req.user.role != "Admin"){
@@ -52,7 +52,7 @@ const showalluser=(req,res)=>{
     
      
 
-}
+};
 
 const deleteuser = async (req, res) => {
         if (req.user.role !== "Admin") {
@@ -218,7 +218,7 @@ const addOwner=(req,res)=>{
                                             }
 
                                             // Send response to client indicating successful registration
-                                            const verificationMessage = `The user has been registered. Please verify your email using this link: localhost:4400/APIS/verify-email?token=${verificationToken}`;
+                                            const verificationMessage = 'The user has been registered. Please verify your email using this link: localhost:4400/APIS/verify-email?token=${verificationToken}';
                                             res.status(200).send({ msg: verificationMessage });
                                         });
                                     }
@@ -278,7 +278,7 @@ const getadmin = (req, res) => {
             return res.json("you are not Admin")}
             const id = req.user.user_id;
         db.query(
-            `SELECT * FROM users WHERE user_id = ? AND loggedout = 'false'`, id, (err, result) => {
+            'SELECT * FROM users WHERE user_id = ? AND loggedout = false', id, (err, result) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send({ success: false, message: 'Internal server error.' });
@@ -396,7 +396,7 @@ const addproject = (req, res) => {
             }
         });
 };
-        
+      
 module.exports = {
     showallprojects,
     showalluser,

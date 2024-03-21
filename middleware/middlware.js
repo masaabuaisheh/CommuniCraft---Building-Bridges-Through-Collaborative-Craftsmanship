@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET_KEY = 'my-super-strong-secret'; 
-const db = require('../config/dbconnection');
+const db = require('../config/dbConnection');
 var islog;
 
 
@@ -34,13 +34,6 @@ const authenticateJWT = (req, res, next) => {
         });
     });
 };
-
-
-
-
-
-
-
 
 
 module.exports = { authenticateJWT, JWT_SECRET_KEY };
