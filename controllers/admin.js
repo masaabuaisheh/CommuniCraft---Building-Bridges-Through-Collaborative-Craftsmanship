@@ -54,7 +54,7 @@ const showalluser=(req,res)=>{
 
 }
 
-    const deleteuser = async (req, res) => {
+const deleteuser = async (req, res) => {
         if (req.user.role !== "Admin") {
             return res.json("You are not admin");
         }
@@ -86,10 +86,10 @@ const showalluser=(req,res)=>{
             console.error('Error deleting user:', error);
             res.status(500).send({ error: 'Internal server error' });
         }
-    };
+};
     
    
-    const deleteFromTable = (tableName, key, value) => {
+const deleteFromTable = (tableName, key, value) => {
         return new Promise((resolve, reject) => {
             db.query(`DELETE FROM ${tableName} WHERE ${key}=? `, [value], (err, result) => {
                 if (err) {
@@ -99,9 +99,9 @@ const showalluser=(req,res)=>{
                 }
             });
         });
-    };
+};
     
-    const selectFromTable = (tableName, columns, key, value) => {
+const selectFromTable = (tableName, columns, key, value) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT ${columns} FROM ${tableName} WHERE ${key}=? `, [value], (err, rows) => {
                 if (err) {
@@ -111,9 +111,9 @@ const showalluser=(req,res)=>{
                 }
             });
         });
-    };
+};
 
-    const updeteprofile=(req,res)=>{
+const updeteprofile=(req,res)=>{
         if(req.user.role != "Admin"){
             return res.json("you are not admin")}
             const id = req.params.id;
@@ -142,9 +142,9 @@ const showalluser=(req,res)=>{
 
     
 
-    };
+};
     
-    const addOwner=(req,res)=>{
+const addOwner=(req,res)=>{
         if (req.user.role !== "Admin") {
             return res.json("You are not admin");
         }
@@ -231,9 +231,9 @@ const showalluser=(req,res)=>{
         });
     });
 
-    };
+};
 
-    const searchuser=(req,res)=>{
+const searchuser=(req,res)=>{
         if(req.user.role != "Admin"){
             return res.json("you are not admin")}
             const id = req.params.id;
@@ -251,8 +251,9 @@ const showalluser=(req,res)=>{
                 
             });
     
-    }
-    const searchproject=(req,res)=>{
+};
+
+const searchproject=(req,res)=>{
         if(req.user.role != "Admin"){
             return res.json("you are not admin")}
             const id = req.params.id;
@@ -270,8 +271,9 @@ const showalluser=(req,res)=>{
                 
             });
     
-    }
-    const getadmin = (req, res) => {
+};
+
+const getadmin = (req, res) => {
         if(req.user.role != "Admin"){
             return res.json("you are not Admin")}
             const id = req.user.user_id;
@@ -289,9 +291,9 @@ const showalluser=(req,res)=>{
                 return res.status(200).send({ success: true, data: result[0], message: 'User found.' });
             }
         );
-    };
+};
 
-    const addproject = (req, res) => {
+const addproject = (req, res) => {
         if (req.user.role !== "Admin") {
             return res.json("You are not an admin");
         }
@@ -393,15 +395,8 @@ const showalluser=(req,res)=>{
                 );
             }
         });
-    };
-    
-    
-    
-    
-
-
-    
-    
+};
+        
 module.exports = {
     showallprojects,
     showalluser,
