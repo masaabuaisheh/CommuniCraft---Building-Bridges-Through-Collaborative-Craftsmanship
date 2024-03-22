@@ -272,7 +272,7 @@ function handleSuccessfulLogin(req, res, result) {
     );
 };
 
-
+/*
 const resetPassword = (req, res) => {
     const { password } = req.body; // Get the reset password from the request query parameters
 
@@ -297,6 +297,55 @@ const resetPassword = (req, res) => {
 
                 // Password updated successfully
                 return res.status(200).send({ msg: 'Password updated successfully' });
+            }
+        );
+    });
+};
+*/
+
+
+const resetPassword = (req, res) => {
+    const { email,username } = req.body; // Get the email from the request body
+
+    if (!email) {
+        return res.status(400).send({ msg: 'Email is missing' });
+    }
+
+    // Generate a new random password
+    const newPassword = Math.floor(1000 + Math.random() * 9000).toString(); // Generate a 4-digit random number
+
+    // Hash the new password
+    bcrypt.hash(newPassword, 10, (err, hash) => {
+        if (err) {
+            return res.status(500).send({ msg: 'Error hashing the password' });
+        }
+
+        // Update the password in the database
+        db.query(
+            'UPDATE loginauthentication SET password = ? WHERE username = ?',
+            [hash, username],
+            (err, result) => {
+                if (err) {
+                    return res.status(500).send({ msg: 'Error updating the password' });
+                }
+
+                // Send the new password to the user's email
+                const mailOptions = {
+                    from: 's12027844@stu.najah.edu',
+                    to: email,
+                    subject: 'Your New Password',
+                    text: `Your new password is: ${newPassword}`
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.error('Error sending email:', error);
+                    } else {
+                        console.log('Email sent:', info.response);
+                    }
+                });
+
+                return res.status(200).send({ msg: 'New password sent successfully' });
             }
         );
     });
