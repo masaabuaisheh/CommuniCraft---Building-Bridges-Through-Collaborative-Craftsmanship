@@ -9,7 +9,6 @@ var conn = mysql.createConnection({
     database: DATABASE
 });
 
-
 conn.connect( (error) => {
     if(error){
         throw error;
