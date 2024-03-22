@@ -232,7 +232,6 @@ const showalluser=(req,res)=>{
     });
 
     };
-
     const searchuser=(req,res)=>{
         if(req.user.role != "Admin"){
             return res.json("you are not admin")}
