@@ -202,13 +202,18 @@ const login = (req, res) => {
 
             const storedPassword = result[0].password;
 
-            // Check if provided password matches stored password (whether hashed or plaintext)
-            if (providedPassword === storedPassword) {
-                handleSuccessfulLogin(req, res, result);
-            } else {
-                // Passwords don't match
-                return res.status(401).send({ msg: 'Username or Password is incorrect! Please try again or reset your password.' });
-            }
+            // Check if provided password matches either hashed or plaintext stored password
+            bcrypt.compare(providedPassword, storedPassword, (err, isMatch) => {
+                if (err) {
+                    console.error("Error comparing passwords:", err);
+                    return res.status(500).send({ msg: "Error comparing passwords" });
+                }
+                if (isMatch || providedPassword === storedPassword) {
+                    handleSuccessfulLogin(req, res, result);
+                } else {
+                    return res.status(401).send({ msg: 'Username or Password is incorrect! Please try again or reset your password.' });
+                }
+            });
         }
     );
 };
@@ -271,37 +276,6 @@ function handleSuccessfulLogin(req, res, result) {
         }
     );
 };
-
-/*
-const resetPassword = (req, res) => {
-    const { password } = req.body; // Get the reset password from the request query parameters
-
-    if ( !password) {
-        return res.status(400).send({ msg: 'new password is missing' });
-    }
-
-    // Hash the new password
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-            return res.status(500).send({ msg: 'Error hashing the password' });
-        }
-
-        // Update the password in the database using the reset password token
-        db.query(
-            'UPDATE loginauthentication SET password = ?',
-            [hash, password],
-            (err, result) => {
-                if (err) {
-                    return res.status(500).send({ msg: 'Error updating the password' });
-                }
-
-                // Password updated successfully
-                return res.status(200).send({ msg: 'Password updated successfully' });
-            }
-        );
-    });
-};
-*/
 
 
 const resetPassword = (req, res) => {
