@@ -2,11 +2,22 @@ const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const db = require('../config/dbconnection');
 const randomstring = require('randomstring');
+const nodemailer = require('nodemailer');
+
 
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
 
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 's12027844@stu.najah.edu', // Your Gmail email address
+        pass: 'xpwp xopq tdhm dilu'
+    }
+});
+
+  
 const register = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -69,17 +80,42 @@ const register = (req, res) => {
                                             });
                                         }
 
-                                        // Commit the transaction
-                                        db.commit((err) => {
-                                            if (err) {
+
+                                        var mailOptions = {
+                                            from: 's12027844@stu.najah.edu',
+                                            to: req.body.email,
+                                            subject: 'Verify Your Email Address',
+                                            text: `Welcome to our platform! Please verify your email address by clicking on the following link: localhost:4400/APIS/verify-email?token=${verificationToken}`
+                                          };
+                                          
+                                          transporter.sendMail(mailOptions, function(error, info){
+                                            if (error) {
+                                              console.log(error);
+                                            } else {
+                                              console.log('Email sent: ' + info.response);
+                                            }
+                                          });
+
+                                        transporter.sendMail(mailOptions, (error, info) => {
+                                            if (error) {
                                                 return db.rollback(() => {
-                                                    res.status(500).send({ msg: err });
+                                                    res.status(500).send({ msg: 'Error sending verification email' });
                                                 });
                                             }
+                                            
+                                            
+                                            // Commit the transaction
+                                            db.commit((err) => {
+                                                if (err) {
+                                                    return db.rollback(() => {
+                                                        res.status(500).send({ msg: err });
+                                                    });
+                                                }
 
-                                            // Send response to client indicating successful registration
-                                            const verificationMessage = `The user has been registered. Please verify your email using this link: localhost:4400/APIS/verify-email?token=${verificationToken}`;
-                                            res.status(200).send({ msg: verificationMessage });
+                                                // Send response to client indicating successful registration
+                                                const verificationMessage = `The user has been registered. Please verify your email using the link sent to your email address.`;
+                                                res.status(200).send({ msg: verificationMessage });
+                                            });
                                         });
                                     }
                                 );
@@ -91,7 +127,6 @@ const register = (req, res) => {
         });
     });
 };
-
 
 
 const verifyEmail = (req, res) => {
