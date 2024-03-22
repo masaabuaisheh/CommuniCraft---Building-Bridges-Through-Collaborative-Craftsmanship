@@ -5,6 +5,8 @@ const randomstring = require('randomstring');
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
 const e = require('cors');
+//
+//
 
 
 const updeteprofileowner=(req,res)=>{
