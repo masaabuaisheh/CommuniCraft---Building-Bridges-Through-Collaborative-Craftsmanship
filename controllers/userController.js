@@ -178,8 +178,9 @@ const logout = async (req, res) => {
     }
 };
 
-
+/*
 const login = (req, res) => {
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -217,6 +218,84 @@ const login = (req, res) => {
         }
     );
 };
+*/
+
+const login = (req, res) => {
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+ 
+    const providedPassword = req.body.password;
+    const username = req.body.username;
+
+    // Authenticate user based on the provided username
+    db.query(
+        `SELECT * FROM loginauthentication WHERE username = ?`,
+        [username],
+        (err, result) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).send({ msg: "Database error" });
+            }
+            if (!result.length) {
+                return res.status(401).send({ msg: 'Username or Password is incorrect! Please try again or reset your password.' });
+            }
+
+            const storedPassword = result[0].password;
+
+            // Check if provided password matches either hashed or plaintext stored password
+            bcrypt.compare(providedPassword, storedPassword, (err, isMatch) => {
+                if (err) {
+                    console.error("Error comparing passwords:", err);
+                    return res.status(500).send({ msg: "Error comparing passwords" });
+                }
+                if (isMatch || providedPassword === storedPassword) {
+                    // If authentication is successful, retrieve the user's email from another table
+                    db.query(
+                        `SELECT user_id FROM login_user WHERE username = ?`,
+                        [username],
+                        (err, user_idResult) => {
+                            if (err) {
+                                console.error("Database error:", err);
+                                return res.status(500).send({ msg: "Database error" });
+                            }
+                            if (!user_idResult.length) {
+                                return res.status(404).send({ msg: 'user ID  not found.' });
+                            }
+
+                            const user_id = user_idResult[0].user_id;
+
+                            // Now you have the email, you can continue your logic as before
+                            db.query(
+                                `SELECT messages FROM users WHERE user_id = ?`,
+                                [user_id],
+                                (err, messagesResult) => {
+                                    if (err) {
+                                        console.error("Database error:", err);
+                                        return res.status(500).send({ msg: "Database error" });
+                                    }
+                                    const messages = messagesResult[0].messages;
+                                    if (messages !== null) {
+                                        // 'messages' column is not null, proceed with login
+                                        handleSuccessfulLogin(req, res, result);
+                                    } else {
+                                        // 'messages' column is null, prompt user to verify email
+                                        return res.status(401).send({ msg: 'Please verify your email before logging in.' });
+                                    }
+                                }
+                            );
+                        }
+                    );
+                } else {
+                    return res.status(401).send({ msg: 'Username or Password is incorrect! Please try again or reset your password.' });
+                }
+            });
+        }
+    );
+};
+
 
 
 function handleSuccessfulLogin(req, res, result) {
