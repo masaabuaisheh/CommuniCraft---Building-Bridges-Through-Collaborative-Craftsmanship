@@ -60,4 +60,5 @@ router.put('/projects/:projectId/tasks/:taskId', authenticateJWT,owner.updatePro
 // 
 router.post('/joinProject/:projectId',authenticateJWT,user.joinProject);
 
+router.post('/chat',openai.chatGPT);
 module.exports=router;
