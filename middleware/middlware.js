@@ -4,8 +4,6 @@ const db = require('../config/dbconnection');
 var islog;
 
 
-
-
 const authenticateJWT = (req, res, next) => {
     const token = req.header('Authorization');
 

@@ -52,10 +52,48 @@ const updeteprofileowner=(req,res)=>{
         );
     };
 
-
     
-    
+    const addNewTaskToProject = (req, res) => {
+        if(req.user.role != "Owner"){
+            return res.json("you are not Owner")}
+        const { projectId } = req.params;
+        const { taskName, assignedTo } = req.body;
+        db.query('INSERT INTO project_tasks (task_name, project_id, assigned_to) VALUES (?, ?, ?)', [taskName, projectId, assignedTo], (error, results) => {
+          if (error) throw error;
+          res.send('Task added successfully');
+        });
+      };
+      
+      const updateProjectTask = (req, res) => {
+        if(req.user.role != "Owner"){
+            return res.json("you are not Owner")}
+        const { projectId, taskId } = req.params;
+        const { taskName, assignedTo } = req.body;
+      
+        db.query('UPDATE project_tasks SET task_name = ?, assigned_to = ? WHERE project_id = ? AND task_id = ?', [taskName, assignedTo, projectId, taskId], (error, results) => {
+          if (error) {
+            console.error('Error updating project task:', error);
+            return res.status(500).send('Error updating project task');
+          }
+          res.send('Task updated successfully');
+        });
+      };
+      
+      const getProjectsByGroupSize = (req, res) => {
+        if(req.user.role != "Owner"){
+            return res.json("you are not Owner")}
+        const { groupSize } = req.params;
+        db.query('SELECT * FROM project WHERE group_size >= ?', [groupSize], (error, results) => {
+          if (error) throw error;
+          res.json(results);
+        });
+      };
     module.exports = {
         updeteprofileowner,
-        getowner
+        getowner,
+        addNewTaskToProject,
+        updateProjectTask,
+        getProjectsByGroupSize
+
+        
     }

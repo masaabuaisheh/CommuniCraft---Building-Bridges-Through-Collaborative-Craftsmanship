@@ -50,15 +50,7 @@ const updeteprofileuser=(req,res)=>{
         );
     };
 
-    const getProjects = (req, res) => {
-        if(req.user.role != "User"){
-            return res.json("you are not user")}
-        db.query('SELECT * FROM project', (error, results) => {
-          if (error) throw error;
-          res.json(results);
-        });
-      };
-      
+    
       const getProjectsBySkill = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
@@ -68,17 +60,9 @@ const updeteprofileuser=(req,res)=>{
           res.json(results);
         });
       };
+
       
-      const getProjectsByGroupSize = (req, res) => {
-        if(req.user.role != "User"){
-            return res.json("you are not user")}
-        const { groupSize } = req.params;
-        db.query('SELECT * FROM project WHERE group_size >= ?', [groupSize], (error, results) => {
-          if (error) throw error;
-          res.json(results);
-        });
-      };
-      
+
       const getProjectDetailsById = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
@@ -88,7 +72,8 @@ const updeteprofileuser=(req,res)=>{
           res.json(results[0]);
         });
       };
-      
+
+
       const getUserProfileById = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
@@ -98,12 +83,63 @@ const updeteprofileuser=(req,res)=>{
           res.json(results[0]);
         });
       };
-      
+      const joinProject = (req, res) => {
+        const projectId = req.params.projectId;
+    const userId = req.user.user_id; // Assuming user information is stored in req.user
+
+    // Begin transaction
+    db.beginTransaction(err => {
+        if (err) {
+            return res.status(500).send({ error: 'Error starting transaction' });
+        }
+
+        // Check if there's space in the project and get the current group size
+        db.query('SELECT group_size FROM project WHERE project_id = ? AND group_size > 0', [projectId], (err, results) => {
+            if (err || results.length === 0) {
+                return db.rollback(() => {
+                    res.status(500).send({ error: 'Error checking project availability or no space left' });
+                });
+            }
+
+            const newGroupSize = results[0].group_size - 1;
+
+            // Update the project's group size
+            db.query('UPDATE project SET group_size = ? WHERE project_id = ?', [newGroupSize, projectId], (err, updateResults) => {
+                if (err) {
+                    return db.rollback(() => {
+                        res.status(500).send({ error: 'Error updating group size' });
+                    });
+                }
+
+                // Record user's participation in the project
+                db.query('INSERT INTO user_project (project_id, user_id, status) VALUES (?, ?, "Active")', [projectId, userId], (err, insertResults) => {
+                    if (err) {
+                        return db.rollback(() => {
+                            res.status(500).send({ error: 'Error recording user participation' });
+                        });
+                    }
+
+                    // Commit the transaction
+                    db.commit(err => {
+                        if (err) {
+                            return db.rollback(() => {
+                                res.status(500).send({ error: 'Error committing transaction' });
+                            });
+                        }
+
+                        res.send({ message: 'Successfully joined the project', projectId: projectId, userId: userId });
+                    });
+                });
+            });
+        });
+    });
+      };
+
+
       const getUserSkillsByUserId = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
         const { userId } = req.params;
-
         db.query('SELECT skills FROM users WHERE user_id = ?', [userId], (error, results) => {
           if (error) {
             console.error('Error fetching user skills:', error);
@@ -113,7 +149,7 @@ const updeteprofileuser=(req,res)=>{
           res.json(results.length > 0 ? results[0].skills.split(',') : []);
         });
       };
-      
+
       const findPotentialCollaborators = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
@@ -123,7 +159,7 @@ const updeteprofileuser=(req,res)=>{
           res.json(results);
         });
       };
-      
+
       const getProjectTasksByProjectId = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
@@ -134,37 +170,70 @@ const updeteprofileuser=(req,res)=>{
         });
       };
       
-      const addNewTaskToProject = (req, res) => {
-        if(req.user.role != "User"){
-            return res.json("you are not user")}
-        const { projectId } = req.params;
-        const { taskName, assignedTo } = req.body;
-        db.query('INSERT INTO project_tasks (task_name, project_id, assigned_to) VALUES (?, ?, ?)', [taskName, projectId, assignedTo], (error, results) => {
-          if (error) throw error;
-          res.send('Task added successfully');
-        });
-      };
       
       const postComment = (req, res) => {
         if(req.user.role != "User"){
-            return res.json("you are not user")}
+            return res.json("you are not user");
+        }
+    
         const { projectId } = req.params;
-        const { commentText, userId } = req.body;
-        db.query('INSERT INTO comments (project_id, user_id, comment_text) VALUES (?, ?, ?)', [projectId, userId, commentText], (error, results) => {
-          if (error) throw error;
-          res.send('Comment added successfully');
+        const { commentText } = req.body;
+        const userId = req.user.user_id; // Assuming req.user.user_id holds the ID of the logged-in user
+    
+        // Check if the user is part of the project they want to comment on
+        db.query('SELECT * FROM user_project WHERE user_id = ? AND project_id = ? AND status = "Active"', [userId, projectId], (checkError, checkResults) => {
+            if (checkError) {
+                console.error('Error checking user project membership:', checkError);
+                return res.status(500).send('Error checking project membership');
+            }
+    
+            if (checkResults.length === 0) {
+                // User is not part of the project
+                return res.status(403).send('User is not a member of the project');
+            }
+    
+            // User is part of the project, proceed to insert comment
+            db.query('INSERT INTO comments (project_id, user_id, comment_text) VALUES (?, ?, ?)', [projectId, userId, commentText], (error, results) => {
+                if (error) {
+                    console.error('Error adding comment:', error);
+                    return res.status(500).send('Error adding comment');
+                }
+                res.send('Comment added successfully');
+            });
         });
-      };
+    };
+    
       
-      const getComments = (req, res) => {
-        if(req.user.role != "User"){
-            return res.json("you are not user")}
-        const { projectId } = req.params;
-        db.query('SELECT c.*, u.name as user_name FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.project_id = ?', [projectId], (error, results) => {
-          if (error) throw error;
-          res.json(results);
+    const getComments = (req, res) => {
+      if(req.user.role !== "User") {
+        return res.json("You are not a user.");
+      }
+    
+      const { projectId } = req.params;
+      const userId = req.user.user_id; // Assuming req.user.user_id contains the ID of the current user
+    
+      // First, check if the user is associated with the project
+      db.query('SELECT * FROM user_project WHERE project_id = ? AND user_id = ? AND status = "Active"', [projectId, userId], (error, projectResults) => {
+        if (error) {
+          console.error('Error checking project association:', error);
+          return res.status(500).send('Error checking project association');
+        }
+    
+        // If the user is not part of the project, deny access
+        if (projectResults.length === 0) {
+          return res.status(403).json({ message: "You are not part of this project." });
+        }
+    
+        // User is part of the project, fetch and return comments
+        db.query('SELECT c.*, u.name as user_name FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.project_id = ?', [projectId], (error, commentsResults) => {
+          if (error) {
+            console.error('Error fetching comments:', error);
+            return res.status(500).send('Error fetching comments');
+          }
+          res.json(commentsResults);
         });
-      };
+      });
+    };
       const getShowcasedProjects = (req, res) => {
         if(req.user.role != "User"){
             return res.json("you are not user")}
@@ -193,42 +262,26 @@ const updeteprofileuser=(req,res)=>{
         });
       };
       
-      const updateProjectTask = (req, res) => {
-        if(req.user.role != "User"){
-            return res.json("you are not user")}
-        const { projectId, taskId } = req.params;
-        const { taskName, assignedTo } = req.body;
-      
-        db.query('UPDATE project_tasks SET task_name = ?, assigned_to = ? WHERE project_id = ? AND task_id = ?', [taskName, assignedTo, projectId, taskId], (error, results) => {
-          if (error) {
-            console.error('Error updating project task:', error);
-            return res.status(500).send('Error updating project task');
-          }
-          res.send('Task updated successfully');
-        });
-      };
-      
-      
-      
      
     
     module.exports = {
         updeteprofileuser,
         getuser,
-        getProjects,
-        getProjectsBySkill,
-        getProjectsByGroupSize,
-        getProjectDetailsById,
-        getUserProfileById,
-        getUserSkillsByUserId,
-        findPotentialCollaborators,
-        getProjectTasksByProjectId,
-        addNewTaskToProject,
-        postComment,
-        getComments,
-        getShowcasedProjects,
-        toggleProjectShowcase,
-        updateProjectTask
+        joinProject,
+    getProjectsBySkill,
+    getProjectDetailsById,
+    getUserProfileById,
+    getUserSkillsByUserId,
+    findPotentialCollaborators,
+    getProjectTasksByProjectId,
+    postComment,
+    getComments,
+    getShowcasedProjects,
+    toggleProjectShowcase
+
+
+
+    
 
 
     }

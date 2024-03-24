@@ -11,8 +11,6 @@ exports.signUpValidation=[
     check('password','Password is required').isLength({max:5})
 
 ]
-
-
 exports.loginValidation=[
     check('username','Please enter a valid Username.').not().isEmpty(),
     check('password','Password may maximum 4 length').isLength({max:4})
