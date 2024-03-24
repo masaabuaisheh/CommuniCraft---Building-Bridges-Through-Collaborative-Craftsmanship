@@ -178,48 +178,6 @@ const logout = async (req, res) => {
     }
 };
 
-/*
-const login = (req, res) => {
-    
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
- 
-    const providedPassword = req.body.password;
-    const username = req.body.username;
-
-    db.query(
-        `SELECT * FROM loginauthentication WHERE username = ?`,
-        [username],
-        (err, result) => {
-            if (err) {
-                console.error("Database error:", err);
-                return res.status(500).send({ msg: "Database error" });
-            }
-            if (!result.length) {
-                return res.status(401).send({ msg: 'Username or Password is incorrect! Please try again or reset your password.' });
-            }
-
-            const storedPassword = result[0].password;
-
-            // Check if provided password matches either hashed or plaintext stored password
-            bcrypt.compare(providedPassword, storedPassword, (err, isMatch) => {
-                if (err) {
-                    console.error("Error comparing passwords:", err);
-                    return res.status(500).send({ msg: "Error comparing passwords" });
-                }
-                if (isMatch || providedPassword === storedPassword) {
-                    handleSuccessfulLogin(req, res, result);
-                } else {
-                    return res.status(401).send({ msg: 'Username or Password is incorrect! Please try again or reset your password.' });
-                }
-            });
-        }
-    );
-};
-*/
-
 const login = (req, res) => {
     
     const errors = validationResult(req);
