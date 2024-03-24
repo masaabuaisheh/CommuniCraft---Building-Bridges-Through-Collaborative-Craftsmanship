@@ -5,7 +5,7 @@ const userController=require('../controllers/userController');
 const admin = require('../controllers/admin'); 
 const user = require('../controllers/user'); 
 const owner = require('../controllers/owner'); 
-
+const openai= require('../controllers/externalAPI-chatgpt'); 
 const material = require('../controllers/material'); 
 const getMaterialsByUserId = require('../controllers/material');
 const deleteYourMaterial = require('../controllers/material');
