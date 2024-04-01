@@ -12,7 +12,7 @@ const {JWT_SECRET} = process.env;
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 's12027844@stu.najah.edu', // Your Gmail email address
+        user: 's12027844@stu.najah.edu', 
         pass: 'xpwp xopq tdhm dilu'
     }
 });
@@ -24,7 +24,7 @@ const register = (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const verificationToken = randomstring.generate(); // Generate a random verification token
+    const verificationToken = randomstring.generate();
 
     db.beginTransaction((err) => {
         if (err) {
@@ -49,7 +49,7 @@ const register = (req, res) => {
                         });
                     }
 
-                    const userId = userResult.insertId; // Get the ID of the newly inserted user
+                    const userId = userResult.insertId; 
 
                     bcrypt.hash(req.body.password, 10, (err, hash) => {
                         if (err) {
@@ -103,17 +103,13 @@ const register = (req, res) => {
                                                 });
                                             }
                                             
-                                            
-                                            // Commit the transaction
                                             db.commit((err) => {
                                                 if (err) {
                                                     return db.rollback(() => {
                                                         res.status(500).send({ msg: err });
                                                     });
                                                 }
-
-                                                // Send response to client indicating successful registration
-                                                const verificationMessage = `The user has been registered. Please verify your email using the link sent to your email address.`;
+                                                   const verificationMessage = `The user has been registered. Please verify your email using the link sent to your email address.`;
                                                 res.status(200).send({ msg: verificationMessage });
                                             });
                                         });
@@ -130,13 +126,12 @@ const register = (req, res) => {
 
 
 const verifyEmail = (req, res) => {
-    const { token } = req.query; // Get the verification token from the request query parameters
+    const { token } = req.query; 
 
     if (!token) {
         return res.status(400).send({ msg: 'Verification token is missing' });
     }
 
-    // Query to update user's email verification status
     db.query(
         'UPDATE users SET messages = ? WHERE token = ?',
         ['verified successfully',token],
@@ -149,7 +144,6 @@ const verifyEmail = (req, res) => {
                 return res.status(404).send({ msg: 'Invalid verification token' });
             }
 
-            // Send success response
             res.status(200).send({ msg: 'Email verified successfully! You can now login.' });
         }
     );
@@ -187,8 +181,6 @@ const login = (req, res) => {
  
     const providedPassword = req.body.password;
     const username = req.body.username;
-
-    // Authenticate user based on the provided username
     db.query(
         `SELECT * FROM loginauthentication WHERE username = ?`,
         [username],
@@ -202,15 +194,12 @@ const login = (req, res) => {
             }
 
             const storedPassword = result[0].password;
-
-            // Check if provided password matches either hashed or plaintext stored password
             bcrypt.compare(providedPassword, storedPassword, (err, isMatch) => {
                 if (err) {
                     console.error("Error comparing passwords:", err);
                     return res.status(500).send({ msg: "Error comparing passwords" });
                 }
                 if (isMatch || providedPassword === storedPassword) {
-                    // If authentication is successful, retrieve the user's email from another table
                     db.query(
                         `SELECT user_id FROM login_user WHERE username = ?`,
                         [username],
@@ -224,8 +213,6 @@ const login = (req, res) => {
                             }
 
                             const user_id = user_idResult[0].user_id;
-
-                            // Now you have the email, you can continue your logic as before
                             db.query(
                                 `SELECT messages FROM users WHERE user_id = ?`,
                                 [user_id],
@@ -236,10 +223,8 @@ const login = (req, res) => {
                                     }
                                     const messages = messagesResult[0].messages;
                                     if (messages !== null) {
-                                        // 'messages' column is not null, proceed with login
                                         handleSuccessfulLogin(req, res, result);
                                     } else {
-                                        // 'messages' column is null, prompt user to verify email
                                         return res.status(401).send({ msg: 'Please verify your email before logging in.' });
                                     }
                                 }
@@ -283,8 +268,6 @@ function handleSuccessfulLogin(req, res, result) {
                     if (!uResult.length) {
                         return res.status(401).send({ msg: 'User not found in users table!' });
                     }
-
-                    //console.log(uResult[0].loggedout)
                     const token = jwt.sign(
                         { user_id: userId,role:uResult[0].role },
                         JWT_SECRET,
@@ -293,7 +276,7 @@ function handleSuccessfulLogin(req, res, result) {
 
                     db.query(
                         `UPDATE users SET token = ?, loggedout = ?, updated_at = NOW() WHERE user_id = ?`,
-                        [token, 'false', userId], // Assuming user is logged in after login
+                        [token, 'false', userId], 
                         (updateErr, updateResult) => {
                             if (updateErr) {
                                 console.error("Database error:", updateErr);
@@ -302,8 +285,7 @@ function handleSuccessfulLogin(req, res, result) {
                             return res.status(200).send({
                                 msg: 'You are Logged In',
                                 token,
-                                //users: uResult[0]
-                                
+                               
                             });
                            
                         }
@@ -315,23 +297,17 @@ function handleSuccessfulLogin(req, res, result) {
 };
 
 
-const resetPassword = (req, res) => {
-    const { email,username } = req.body; // Get the email from the request body
+const resetPassword = (req, res) => {z
+    const { email,username } = req.body; 
 
     if (!email) {
         return res.status(400).send({ msg: 'Email is missing' });
     }
-
-    // Generate a new random password
-    const newPassword = Math.floor(1000 + Math.random() * 9000).toString(); // Generate a 4-digit random number
-
-    // Hash the new password
+    const newPassword = Math.floor(1000 + Math.random() * 9000).toString(); 
     bcrypt.hash(newPassword, 10, (err, hash) => {
         if (err) {
             return res.status(500).send({ msg: 'Error hashing the password' });
         }
-
-        // Update the password in the database
         db.query(
             'UPDATE loginauthentication SET password = ? WHERE username = ?',
             [hash, username],
@@ -339,8 +315,6 @@ const resetPassword = (req, res) => {
                 if (err) {
                     return res.status(500).send({ msg: 'Error updating the password' });
                 }
-
-                // Send the new password to the user's email
                 const mailOptions = {
                     from: 's12027844@stu.najah.edu',
                     to: email,

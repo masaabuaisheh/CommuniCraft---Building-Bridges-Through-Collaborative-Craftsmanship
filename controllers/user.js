@@ -85,25 +85,19 @@ const updeteprofileuser=(req,res)=>{
       };
       const joinProject = (req, res) => {
         const projectId = req.params.projectId;
-    const userId = req.user.user_id; // Assuming user information is stored in req.user
+    const userId = req.user.user_id; 
 
-    // Begin transaction
     db.beginTransaction(err => {
         if (err) {
             return res.status(500).send({ error: 'Error starting transaction' });
         }
-
-        // Check if there's space in the project and get the current group size
-        db.query('SELECT group_size FROM project WHERE project_id = ? AND group_size > 0', [projectId], (err, results) => {
+            db.query('SELECT group_size FROM project WHERE project_id = ? AND group_size > 0', [projectId], (err, results) => {
             if (err || results.length === 0) {
                 return db.rollback(() => {
                     res.status(500).send({ error: 'Error checking project availability or no space left' });
                 });
             }
-
             const newGroupSize = results[0].group_size - 1;
-
-            // Update the project's group size
             db.query('UPDATE project SET group_size = ? WHERE project_id = ?', [newGroupSize, projectId], (err, updateResults) => {
                 if (err) {
                     return db.rollback(() => {
@@ -111,15 +105,12 @@ const updeteprofileuser=(req,res)=>{
                     });
                 }
 
-                // Record user's participation in the project
                 db.query('INSERT INTO user_project (project_id, user_id, status) VALUES (?, ?, "Active")', [projectId, userId], (err, insertResults) => {
                     if (err) {
                         return db.rollback(() => {
                             res.status(500).send({ error: 'Error recording user participation' });
                         });
                     }
-
-                    // Commit the transaction
                     db.commit(err => {
                         if (err) {
                             return db.rollback(() => {
@@ -178,9 +169,7 @@ const updeteprofileuser=(req,res)=>{
     
         const { projectId } = req.params;
         const { commentText } = req.body;
-        const userId = req.user.user_id; // Assuming req.user.user_id holds the ID of the logged-in user
-    
-        // Check if the user is part of the project they want to comment on
+        const userId = req.user.user_id; 
         db.query('SELECT * FROM user_project WHERE user_id = ? AND project_id = ? AND status = "Active"', [userId, projectId], (checkError, checkResults) => {
             if (checkError) {
                 console.error('Error checking user project membership:', checkError);
@@ -188,11 +177,10 @@ const updeteprofileuser=(req,res)=>{
             }
     
             if (checkResults.length === 0) {
-                // User is not part of the project
+               
                 return res.status(403).send('User is not a member of the project');
             }
     
-            // User is part of the project, proceed to insert comment
             db.query('INSERT INTO comments (project_id, user_id, comment_text) VALUES (?, ?, ?)', [projectId, userId, commentText], (error, results) => {
                 if (error) {
                     console.error('Error adding comment:', error);
@@ -210,21 +198,15 @@ const updeteprofileuser=(req,res)=>{
       }
     
       const { projectId } = req.params;
-      const userId = req.user.user_id; // Assuming req.user.user_id contains the ID of the current user
-    
-      // First, check if the user is associated with the project
+      const userId = req.user.user_id; 
       db.query('SELECT * FROM user_project WHERE project_id = ? AND user_id = ? AND status = "Active"', [projectId, userId], (error, projectResults) => {
         if (error) {
           console.error('Error checking project association:', error);
           return res.status(500).send('Error checking project association');
         }
-    
-        // If the user is not part of the project, deny access
         if (projectResults.length === 0) {
           return res.status(403).json({ message: "You are not part of this project." });
         }
-    
-        // User is part of the project, fetch and return comments
         db.query('SELECT c.*, u.name as user_name FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.project_id = ?', [projectId], (error, commentsResults) => {
           if (error) {
             console.error('Error fetching comments:', error);

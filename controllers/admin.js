@@ -59,26 +59,26 @@ const showalluser=(req,res)=>{
             return res.json("You are not admin");
         }
     
-        const id = req.params.id; // Corrected property name to req.params.id
+        const id = req.params.id; 
     
         try {
-            // Delete from user_project table
+           
             await deleteFromTable('user_project', 'user_id', id);
     
-            // Fetch username from login_user table
+            
             const rows = await selectFromTable('login_user', 'username', 'user_id', id);
             if (rows.length === 0) {
                 throw new Error('Username not found');
             }
             const username = rows[0].username;
     
-            // Delete from login_user table
+           
             await deleteFromTable('login_user', 'user_id', id);
     
-            // Delete from loginauthentication table
+            
             await deleteFromTable('loginauthentication', 'username', username);
     
-            // Delete from users table
+            
             await deleteFromTable('users', 'user_id', id);
     
             res.status(200).send({ msg: 'Deleted successfully' });
@@ -153,7 +153,7 @@ const showalluser=(req,res)=>{
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const verificationToken = randomstring.generate(); // Generate a random verification token
+    const verificationToken = randomstring.generate(); 
 
     db.beginTransaction((err) => {
         if (err) {
@@ -178,7 +178,7 @@ const showalluser=(req,res)=>{
                         });
                     }
 
-                    const userId = userResult.insertId; // Get the ID of the newly inserted user
+                    const userId = userResult.insertId; 
 
                     bcrypt.hash(req.body.password, 10, (err, hash) => {
                         if (err) {
@@ -209,7 +209,7 @@ const showalluser=(req,res)=>{
                                             });
                                         }
 
-                                        // Commit the transaction
+                                       
                                         db.commit((err) => {
                                             if (err) {
                                                 return db.rollback(() => {
@@ -217,7 +217,7 @@ const showalluser=(req,res)=>{
                                                 });
                                             }
 
-                                            // Send response to client indicating successful registration
+                                            
                                             const verificationMessage = `The user has been registered. Please verify your email using this link: localhost:4400/APIS/verify-email?token=${verificationToken}`;
                                             res.status(200).send({ msg: verificationMessage });
                                         });
@@ -298,17 +298,13 @@ const showalluser=(req,res)=>{
         const { title, description, group_size, showcased, skill_name } = req.body;
         console.log(req.body);
     
-        // Check if showcased property is provided, if not, set a default value or handle it as per your requirement
         const showcasedValue = showcased !== undefined ? showcased : null;
-    
-        // Begin transaction
         db.beginTransaction(err => {
             if (err) {
                 console.error('Error beginning transaction:', err);
                 return res.status(500).json({ success: false, error: 'Transaction begin error' });
             }
     
-            // Check if skill_name exists in craftskill table
             db.query(
                 'SELECT skill_id FROM craftskill WHERE skill_name = ?',
                 [skill_name],
@@ -322,13 +318,10 @@ const showalluser=(req,res)=>{
     
                     let skillId;
                     if (craftSkillResult.length > 0) {
-                        // Skill name exists in craftskill table, get the skill_id
                         skillId = craftSkillResult[0].skill_id;
-                        // Proceed to insert into projectskill table
                         insertIntoProjectSkill(skillId);
                     } else {
-                        // Skill name doesn't exist in craftskill table, insert it
-                        db.query(
+                         db.query(
                             'INSERT INTO craftskill (skill_name) VALUES (?)',
                             [skill_name],
                             (err, insertCraftSkillResult) => {
@@ -338,10 +331,8 @@ const showalluser=(req,res)=>{
                                         return res.status(500).json({ success: false, error: 'Error inserting craft skill' });
                                     });
                                 }
-                                // Get the inserted skill_id
-                                skillId = insertCraftSkillResult.insertId;
-                                // Proceed to insert into projectskill table
-                                insertIntoProjectSkill(skillId);
+                              skillId = insertCraftSkillResult.insertId;
+                               insertIntoProjectSkill(skillId);
                             }
                         );
                     }
@@ -361,9 +352,7 @@ const showalluser=(req,res)=>{
                             });
                         }
     
-                        const projectId = projectResult.insertId; // Get the auto-incremented project ID
-    
-                        // Insert into projectskill table
+                        const projectId = projectResult.insertId; 
                         db.query(
                             'INSERT INTO projectskill (project_id, skill_id) VALUES (?, ?)',
                             [projectId, skillId],
@@ -374,8 +363,6 @@ const showalluser=(req,res)=>{
                                         return res.status(500).json({ success: false, error: 'Error adding project skill' });
                                     });
                                 }
-    
-                                // Commit transaction
                                 db.commit(err => {
                                     if (err) {
                                         return db.rollback(() => {
@@ -394,12 +381,7 @@ const showalluser=(req,res)=>{
         });
     };
     
-    
-    
-    
-
-
-    
+ 
     
 module.exports = {
     showallprojects,

@@ -1,11 +1,8 @@
 const request = require('request');
 
 function chatGPT(req, res) {
-    // Request body containing the data to be sent
+   
     const requestBody = req.body;
-
-
-  // Options for the external API call
   const options = {
       method: 'POST',
       url: 'https://chatgpt-api8.p.rapidapi.com/',
@@ -18,7 +15,6 @@ function chatGPT(req, res) {
       json: true
   };
 
-  // Make the external API call using the request library
   request(options, (error, response, body) => {
       if (error) {
           console.error('Error sending request:', error);
@@ -28,6 +24,4 @@ function chatGPT(req, res) {
       }
   });
 }
-// openai.js
-
 module.exports = { chatGPT };

@@ -9,7 +9,6 @@ var conn = mysql.createConnection({
     database: DATABASE
 });
 
-//nancy
 conn.connect( (error) => {
     if(error){
         throw error;

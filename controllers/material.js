@@ -4,18 +4,15 @@ const addMaterial = async (req, res) => {
   if(req.user.role != "User"){
     return res.json("you are not user")}
     try {
-      // Extract required parameters from the request body
+     
       const { nameofmaterial, project_title } = req.body;
-      const user_id = req.user.user_id; // Assuming the user_id is stored in req.user.user_id
+      const user_id = req.user.user_id; 
       const user_role = req.user.role;
   
-      // Check if the user is authorized to add material
-      if (user_role !== "User") {
+     if (user_role !== "User") {
         return res.status(403).json({ error: "You are not authorized to add material" });
       }
-  
-      // Check if the material already exists for the project
-      db.query(
+  db.query(
         'SELECT * FROM material WHERE nameofmaterial = ? AND user_id = ? AND project_title = ?',
         [nameofmaterial, user_id, project_title],
         async (error, results) => {
@@ -25,7 +22,6 @@ const addMaterial = async (req, res) => {
           }
   
           if (results && results.length > 0) {
-            // If material already exists, update the quantity
             db.query(
               'UPDATE material SET quantity = quantity + 1 WHERE nameofmaterial = ? AND user_id = ? AND project_title = ?',
               [nameofmaterial, user_id, project_title],
@@ -38,7 +34,6 @@ const addMaterial = async (req, res) => {
               }
             );
           } else {
-            // If material doesn't exist, insert a new row
             db.query(
              ' INSERT INTO material (nameofmaterial, quantity, user_id, project_title, date_added) VALUES (?, 1, ?, ?, CURDATE())',
               [nameofmaterial, user_id, project_title],
@@ -64,9 +59,8 @@ const getYourMaterial  = async (req, res) => {
   if(req.user.role != "User"){
     return res.json("you are not user")}
     try {
-        const user_id = req.user.user_id; // Assuming the user_id is stored in req.user.user_id
-
-        // Retrieve materials inserted by the user
+        const user_id = req.user.user_id; 
+       
         db.query(
            ' SELECT * FROM material WHERE user_id = ?',
             [user_id],
@@ -75,8 +69,7 @@ const getYourMaterial  = async (req, res) => {
                     console.error('Error executing SELECT query:', error);
                     return res.status(500).json({ success: false, error: 'An error occurred while retrieving materials' });
                 }
-                //res.status(200).json({ success: true, materials: results });
-                res.status(200).json({ success: true, message: 'These are the materials that you have added:', materials: results });
+               res.status(200).json({ success: true, message: 'These are the materials that you have added:', materials: results });
 
             }
 
@@ -92,11 +85,9 @@ const deleteYourMaterial = async (req, res) => {
   if(req.user.role != "User"){
     return res.json("you are not user")}
     try {
-        const user_id = req.user.user_id; // Assuming the user_id is stored in req.user.user_id
+        const user_id = req.user.user_id; 
         const { nameofmaterial, project_title } = req.body;
-
-        // Check if the material exists and is associated with the user
-        db.query(
+ db.query(
            ' SELECT * FROM material WHERE nameofmaterial = ? AND project_title = ? AND user_id = ?',
             [nameofmaterial, project_title, user_id],
             (error, materials) => {
@@ -110,8 +101,7 @@ const deleteYourMaterial = async (req, res) => {
                 }
 
                 if (materials.length === 1 && materials[0].quantity === 1) {
-                    // If only one material exists and its quantity is 1, delete it
-                    db.query(
+                   db.query(
                        ' DELETE FROM material WHERE nameofmaterial = ? AND project_title = ? AND user_id = ?',
                         [nameofmaterial, project_title, user_id],
                         (error, results) => {
@@ -123,7 +113,6 @@ const deleteYourMaterial = async (req, res) => {
                         }
                     );
                 } else {
-                    // If multiple materials exist or quantity is more than 1, decrement quantity by 1
                     db.query(
                     '    UPDATE material SET quantity = quantity - 1 WHERE nameofmaterial = ? AND project_title = ? AND user_id = ? LIMIT 1',
                         [nameofmaterial, project_title, user_id],
@@ -199,9 +188,7 @@ const showavailablematerial = async (req, res) => {
           if (materials.length === 0) {
             return res.status(404).json({ success: false, error: 'No materials found for the user\'s projects' });
           }
-
-          // Add a flag to each material indicating if it was added by the logged-in user
-          const materialsWithOwnership = materials.map(material => ({
+const materialsWithOwnership = materials.map(material => ({
             ...material,
             isUserMaterial: material.email === loggedInUserEmail,
             ownershipMessage: material.email === loggedInUserEmail ? 'This is your material' : 'Material added by another user'
@@ -222,10 +209,8 @@ const showavailablematerial = async (req, res) => {
 const buyMaterial = async (req, res) => {
   try {
     const loggedInUserId = req.user.user_id;
-    const { nameofmaterial, project_title, email } = req.body; // Extract nameofmaterial, project_title, and email from req.body
-
-    // Check if the user has already bought the material
-    const checkUserMaterialQuery = 'SELECT material FROM users WHERE user_id = ${loggedInUserId}';
+    const { nameofmaterial, project_title, email } = req.body; 
+   const checkUserMaterialQuery = 'SELECT material FROM users WHERE user_id = ${loggedInUserId}';
 
     db.query(checkUserMaterialQuery, async (err, userMaterialsResult) => {
       if (err) {
@@ -237,10 +222,7 @@ const buyMaterial = async (req, res) => {
       if (userMaterials.includes(nameofmaterial)) {
         return res.json({ message: "You already have this material" });
       }
-
-      // Proceed with the purchase process
-      // Check user's association with a project
-      const userProjectQuery = `
+ const userProjectQuery = `
         SELECT up.project_id
         FROM user_project up
         WHERE up.user_id = ?`;
@@ -256,9 +238,7 @@ const buyMaterial = async (req, res) => {
         }
 
         const projectId = projectResult[0].project_id;
-
-        // Retrieve the project title associated with the project ID
-        const projectTitleQuery = `
+         const projectTitleQuery = `
           SELECT p.title
           FROM project p
           WHERE p.project_id = ?`;
@@ -273,17 +253,12 @@ const buyMaterial = async (req, res) => {
             return res.status(400).json({ success: false, error: 'Project title not found' });
           }
 
-          const fetchedProjectTitle = projectTitleResult[0].title;
-
-          // Compare the fetched project title with the project title from req.body
           if (fetchedProjectTitle !== project_title) {
             return res.status(400).json({ success: false, error: 'You are not associated with the specified project' });
           }
-
-          // Check if the material exists and is associated with the project title
-          const checkMaterialQuery = `
+           const checkMaterialQuery = `
             SELECT quantity FROM material
-            WHERE nameofmaterial = ? AND project_title = ?`; // Add condition for project title
+            WHERE nameofmaterial = ? AND project_title = ?`; 
 
           db.query(checkMaterialQuery, [nameofmaterial, project_title], async (error, quantityResult) => {
             if (error) {
@@ -297,34 +272,29 @@ const buyMaterial = async (req, res) => {
 
             const materialQuantity = quantityResult[0].quantity;
 
-            // Proceed with the purchase based on material quantity
             let message = '';
             let actionQuery;
 
             if (materialQuantity === 1) {
               message = 'This is the last one, This material is for you.';
-              // Remove material from database
+              
               actionQuery = `
                 DELETE FROM material
-                WHERE nameofmaterial = ? AND project_title = ?`; // Add condition for project title
+                WHERE nameofmaterial = ? AND project_title = ?`; 
             } else {
-              // Decrement quantity of material by 1
               message = 'Material purchased successfully, This material is for you.';
               actionQuery = `
                 UPDATE material
                 SET quantity = quantity - 1
-                WHERE nameofmaterial = ? AND project_title = ?`; // Add condition for project title
+                WHERE nameofmaterial = ? AND project_title = ?`; 
             }
 
-            // Execute the appropriate action query
             db.query(actionQuery, [nameofmaterial, project_title], async (error, updateResult) => {
               if (error) {
                 console.error('Error updating material quantity:', error);
                 return res.status(500).json({ success: false, error: 'An error occurred while updating material quantity' });
               }
-
-              // Add material to users table
-              const addMaterialToUserQuery = `
+                  const addMaterialToUserQuery = `
                 UPDATE users
                 SET material = CONCAT(IFNULL(material, ''), ?, ', ')
                 WHERE user_id = ?`;
@@ -335,7 +305,6 @@ const buyMaterial = async (req, res) => {
                   return res.status(500).json({ success: false, error: 'An error occurred while adding material to user' });
                 }
 
-                // Send response
                 res.status(200).json({ success: true, message });
               });
             });
@@ -349,7 +318,6 @@ const buyMaterial = async (req, res) => {
   }
 };
 
- 
 module.exports = {
   addMaterial,
   getYourMaterial,
